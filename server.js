@@ -303,7 +303,6 @@ function login(req, res)
                 else
                      writeResult(req, res, req.session.user);
             });
-            writeResult(req, res, req.session.user);
           }
           else 
           {
@@ -318,7 +317,7 @@ function login(req, res)
 function logout(req, res)
 {
   req.session.user = undefined;
-  writeResult(req, res, {'result' : 'Nobody is logged in.'});
+  //writeResult(req, res, {'result' : 'Nobody is logged in.'});
 }
 
 function writeResult(req, res, obj)
@@ -359,8 +358,10 @@ function listUsers(req, res)
     var con = mysql.createConnection(conInfo);
     con.connect(function(err)
     {
-        if(err)
+        if(err){
             writeResult(req, res, {'error': err});
+            return;
+        }
         else{
             con.query("SELECT USER_ID, USER_EMAIL, USER_LOGINS FROM USER ORDER BY USER_LOGINS", function(err, result, fields){
             if(err) {
